@@ -5,12 +5,12 @@ const router = express.Router();
 
 router.get("/api/get/allWarehouses", (req, res) => {
   pool
-    .query(`SELLECT * FROM warehouses`)
+    .query(`SELECT * FROM warehouses`)
     .then((q_res) => res.send(q_res.rows))
     .catch((err) => console.log(err));
 });
 
-router.post("api/add/supplier/:whName", (req, res) => {
+router.post("api/add/warehouse/:whName", (req, res) => {
   pool
     .query(`INSERT INTO warehouses(warehouse_name) VALUES($1) RETURNING *`, [
       req.params.whName,
@@ -18,3 +18,5 @@ router.post("api/add/supplier/:whName", (req, res) => {
     .then((q_res) => res.send(q_res.rows[0]))
     .catch((err) => console.log(err));
 });
+
+module.exports = router;

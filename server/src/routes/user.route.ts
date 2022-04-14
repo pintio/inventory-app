@@ -5,13 +5,13 @@ const router = express.Router();
 
 router.get("/api/get/allUsers", (req, res) => {
   pool
-    .query(`SELLECT * FROM users`)
+    .query(`SELECT * FROM users`)
     .then((q_res) => res.send(q_res.rows))
     .catch((err) => console.log(err));
 });
 
 router.post(
-  "api/add/supplier/:username&:fullname&:position&:joiningDate",
+  "api/add/user/:username&:fullname&:position&:joiningDate",
   (req, res) => {
     const today = new Date().getDate;
     pool
@@ -30,3 +30,5 @@ router.post(
       .catch((err) => console.log(err));
   }
 );
+
+module.exports = router;

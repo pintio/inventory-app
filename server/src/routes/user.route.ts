@@ -11,7 +11,7 @@ router.get("/api/get/allUsers", (req, res) => {
 });
 
 router.post(
-  "api/add/user/:username&:fullname&:position&:joiningDate",
+  "/api/add/user/:username&:fullname&:position&:joiningDate",
   (req, res) => {
     const today = new Date().getDate;
     pool

@@ -10,7 +10,7 @@ router.get("/api/get/allSuppliers", (req, res) => {
     .catch((err) => console.log(err));
 });
 
-router.post("api/add/supplier/:suppName", (req, res) => {
+router.post("/api/add/supplier/:suppName", (req, res) => {
   pool
     .query(`INSERT INTO suppliers(supplier_name) VALUES($1) RETURNING *`, [
       req.params.suppName,

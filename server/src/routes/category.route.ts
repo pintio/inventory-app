@@ -10,7 +10,7 @@ router.get("/api/get/allCategories", (req, res) => {
     .catch((err) => console.log(err));
 });
 
-router.post("api/add/category/:catName", (req, res) => {
+router.post("/api/add/category/:catName", (req, res) => {
   console.log("lololo");
   pool
     .query(`INSERT INTO categories(category_name) VALUES($1) RETURNING *`, [

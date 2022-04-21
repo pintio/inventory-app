@@ -1,5 +1,5 @@
 import React from "react";
-import NavItem from "../components/navigation/NavItem";
+
 import NavBar from "../components/navigation/NavBar";
 import Greetings from "../components/homeComponents/Greetings";
 import QuickLinks from "../components/homeComponents/QuickLinks";

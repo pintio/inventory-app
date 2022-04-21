@@ -1,4 +1,5 @@
 import React from "react";
+
 import "./style/App.css";
 
 import HomePage from "./pages/Home";
@@ -6,9 +7,7 @@ import HomePage from "./pages/Home";
 function App() {
   return (
     <div className="">
-      <main>
-        <HomePage />
-      </main>
+      <main>lol</main>
     </div>
   );
 }

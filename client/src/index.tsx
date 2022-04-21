@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./style/index.css";
 
 import HomePage from "./pages/Home";
-import App from "./App";
+import StockPage from "./pages/Stock";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -15,7 +15,7 @@ root.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/lol" element={<App />} />
+      <Route path="/stock" element={<StockPage />} />
     </Routes>
   </BrowserRouter>
 );

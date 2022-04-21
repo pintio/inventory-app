@@ -1,10 +1,6 @@
 import React from "react";
 
-import "./style/App.css";
-
-import HomePage from "./pages/Home";
-
-function App() {
+function App(): JSX.Element {
   return (
     <div className="">
       <main>lol</main>

@@ -1,0 +1,16 @@
+th {
+  background-color: aquamarine;
+  text-align: center;
+}
+
+th:hover {
+  background-color: rgb(51, 238, 176);
+}
+
+tr {
+  background-color: rgb(245, 245, 237);
+}
+
+tr:hover {
+  background-color: rgb(221, 221, 207);
+}

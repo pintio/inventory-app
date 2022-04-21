@@ -1,22 +1,18 @@
 import React from "react";
 
-import NavBar from "../components/navigation/NavBar";
+import Layout from "../components/Layout";
+
 import Greetings from "../components/homeComponents/Greetings";
 import QuickLinks from "../components/homeComponents/QuickLinks";
 import NavigationTileCoponents from "../components/homeComponents/NavigationTileComponent";
 
-const HomePage = function () {
+const HomePage = function (): JSX.Element {
   return (
-    <>
-      <main className=" w-full bg-themeWhite  flex">
-        <NavBar />
-        <div className="w-full h-full  container ml-32 px-16 py-8 lg:px-36 flex flex-col justify-evenly">
-          <Greetings name="pintio" />
-          <QuickLinks />
-          <NavigationTileCoponents />
-        </div>
-      </main>
-    </>
+    <Layout>
+      <Greetings name="pintio" />
+      <QuickLinks />
+      <NavigationTileCoponents />
+    </Layout>
   );
 };
 

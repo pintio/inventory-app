@@ -8,7 +8,7 @@ type navObj = {
 
 const navArr: navObj[] = [
   { link: "", title: "home" },
-  { link: "lol", title: "stock" },
+  { link: "stock", title: "stock" },
   { link: "reports", title: "reports" },
   { link: "master list", title: "master list" },
   { link: "Settings", title: "Settings" },
@@ -17,7 +17,7 @@ const navArr: navObj[] = [
 const NavBarComponent = function ({ children }: { children: ReactChild[] }) {
   return (
     <>
-      <div className="py-6 h-screen fixed w-32 flex flex-wrap content-between bg-primary">
+      <div className=" z-50 py-6 h-screen fixed w-32 flex flex-wrap content-between bg-primary">
         <div className="w-full text-center">logo</div>
         <nav className="flex flex-wrap items-center content-center text-center">
           {children}
@@ -39,8 +39,8 @@ const NavBar = function () {
             className={({ isActive }) => {
               return `${
                 isActive
-                  ? "text-lg font-semibold text-secondary "
-                  : "text-md text-themeWhite hover:bg-pink-500"
+                  ? "text-lg font-semibold text-secondary bg-themeWhite ml-4 rounded-l"
+                  : "text-md text-themeWhite hover:bg-primaryDark"
               } py-2 w-full`;
             }}
           >

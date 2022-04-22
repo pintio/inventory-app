@@ -7,10 +7,10 @@ th:hover {
   background-color: rgb(51, 238, 176);
 }
 
-tr {
+td {
   background-color: rgb(245, 245, 237);
 }
 
-tr:hover {
+td:hover {
   background-color: rgb(221, 221, 207);
 }

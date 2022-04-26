@@ -6,7 +6,7 @@ import Header from "./navigation/Header";
 function Layout({
   children,
 }: {
-  children: ReactChild | ReactChild[];
+  children: JSX.Element | JSX.Element[];
 }): JSX.Element {
   return (
     <main className=" w-full  bg-themeWhite  flex">

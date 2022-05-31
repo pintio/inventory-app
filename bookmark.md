@@ -11,5 +11,7 @@ https://tablericons.com/
 
 <!-- TODO -->
 
+server -> create a script to fetch the column headers for each table, the result can be pulled from the client to create forms, table format etc.
+
 create pages - [home, stock, reports, recieve, order, warehouses, masterList, settings ]
 create routes

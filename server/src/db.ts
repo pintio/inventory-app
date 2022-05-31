@@ -1,11 +1,17 @@
-import { Pool } from "pg";
+import { createClient } from "@supabase/supabase-js";
+import process from "process";
 
-const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "inventorydb",
-  password: process.env.DB_PASSWORD,
-  port: 5432,
-});
+const supabaseUrl = process.env.SUPABASE_URL as string;
 
-export default pool;
+const supabaseKey = process.env.SUPABASE_KEY as string;
+
+const psqlDb = createClient(supabaseUrl, supabaseKey);
+
+const lol = async () => {
+  let ab = await psqlDb.from("categories").select("*");
+  console.log(ab, "DGDFGF");
+};
+
+lol();
+
+export default psqlDb;

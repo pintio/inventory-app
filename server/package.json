@@ -4,9 +4,10 @@
   "description": "implement Model, controller and routes format.",
   "main": "app.ts",
   "dependencies": {
+    "@supabase/supabase-js": "^1.35.3",
     "body-parser": "^1.20.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.0",
+    "dotenv": "^16.0.1",
     "express": "^4.17.3",
     "helmet": "^5.0.2",
     "pg": "^8.7.3"

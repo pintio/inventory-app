@@ -17,7 +17,7 @@ const navArr: navObj[] = [
 const NavBarComponent = function ({ children }: { children: ReactChild[] }) {
   return (
     <>
-      <div className=" z-50 py-6 h-screen fixed w-32 flex flex-wrap content-between bg-primary">
+      <div className=" z-50 py-6 h-screen fixed w-48 flex flex-wrap content-between bg-slate-50 border-r-2 border-opacity-30">
         <div className="w-full text-center">logo</div>
         <nav className="flex flex-wrap items-center content-center text-center">
           {children}
@@ -35,12 +35,13 @@ const NavBar = function () {
       {navArr.map((navItem) => {
         return (
           <NavLink
+            key={navItem.title}
             to={`/${navItem.link}`}
             className={({ isActive }) => {
               return `${
                 isActive
-                  ? "text-lg font-semibold text-secondary bg-themeWhite ml-4 rounded-l"
-                  : "text-md text-themeWhite hover:bg-primaryDark"
+                  ? "text-lg font-bold text-primary "
+                  : "text-md text-slate-700 hover:text-themeBlack"
               } py-2 w-full`;
             }}
           >

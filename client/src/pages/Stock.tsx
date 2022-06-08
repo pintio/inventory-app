@@ -1,18 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 import Layout from "../components/Layout";
 
 import ItemTable from "../components/ItemTable";
 
-import PopUp from "../components/PopUp";
 import Form from "../components/Form";
 
+import PopUp from "../components/PopUp";
+
+// interfaces
+import ColumnNames from "../interfaces/column-names-state.interface";
+import InputValue from "../interfaces/input-value-object.interface";
+import Table from "../interfaces/table.interface";
+
 const StockPage = function (): JSX.Element {
-  const [formVisibility, setFormVisibility] = useState(false);
+  const [formVisibility, setFormVisibility] = useState<boolean>(false);
+  const [formInput, setFormInput] = useState<InputValue>({});
+  const [columnNames, setColumnNames] = useState<ColumnNames[]>([]);
+  const [tableData, setTableData] = useState<Table[]>([]);
+
+  useEffect(() => {
+    axios.get("/api/get/categoriesColumnNames").then((res) => {
+      setColumnNames(res.data);
+    });
+
+    axios.get("api/get/allCategories").then((res) => {
+      setTableData(res.data);
+    });
+  });
 
   return (
     <Layout>
-      <div className="my-6 flex justify-between">
+      <div className="my-6 flex justify-between bg-slate-50">
         <h1 className="text-3xl text-themeBlack font-medium">
           Inventory
           <span className="text-5xl text-themeBlackLight font-light">
@@ -28,10 +48,19 @@ const StockPage = function (): JSX.Element {
           Add Item
         </button>
       </div>
+
       <PopUp visibility={formVisibility}>
-        <Form setVisibility={setFormVisibility} />
+        <Form
+          setVisibility={setFormVisibility}
+          setFormInputValues={setFormInput}
+          formInput={formInput}
+          columnArr={columnNames}
+          action={`/api/add/category/${formInput.category_name}`}
+          method="post"
+        />
       </PopUp>
-      <ItemTable />
+
+      <ItemTable columnArr={columnNames} tableArr={tableData} />
     </Layout>
   );
 };

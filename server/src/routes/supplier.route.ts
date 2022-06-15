@@ -1,22 +1,46 @@
 import express from "express";
-import pool from "../db";
+import psqlDb from "../db";
 
 const router = express.Router();
 
-router.get("/api/get/allSuppliers", (req, res) => {
-  pool
-    .query(`SELECT * FROM suppliers`)
-    .then((q_res) => res.send(q_res.rows))
-    .catch((err) => console.log(err));
+router.get("/api/get/supplierColumnNames", async (req, res) => {
+  const columnArr: { column_name: string; type: string }[] = [
+    { column_name: "serial_number", type: "number" },
+    { column_name: "supplier_name", type: "text" },
+  ];
+  res.send(columnArr);
 });
 
-router.post("/api/add/supplier/:suppName", (req, res) => {
-  pool
-    .query(`INSERT INTO suppliers(supplier_name) VALUES($1) RETURNING *`, [
-      req.params.suppName,
-    ])
-    .then((q_res) => res.send(q_res.rows[0]))
-    .catch((err) => console.log(err));
+router.get("/api/get/allSuppliers", async (req, res) => {
+  try {
+    const { data, error } = await psqlDb.from("suppliers").select("*");
+    if (!error) res.send(data);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post("/api/add/supplier/:suppName", async (req, res) => {
+  try {
+    const { data, error } = await psqlDb
+      .from("suppliers")
+      .insert({ supplier_name: req.params.suppName });
+    if (error) console.log(error);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.delete("/api/delete/supplier/:suppId", async (req, res) => {
+  try {
+    const { data, error } = await psqlDb
+      .from("suppliers")
+      .delete()
+      .match({ s_id: req.params.suppId });
+    if (error) console.log(error);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 module.exports = router;

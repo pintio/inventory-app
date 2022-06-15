@@ -2,15 +2,3 @@ th {
   background-color: aquamarine;
   text-align: center;
 }
-
-th:hover {
-  background-color: rgb(51, 238, 176);
-}
-
-td {
-  background-color: rgb(245, 245, 237);
-}
-
-td:hover {
-  background-color: rgb(221, 221, 207);
-}

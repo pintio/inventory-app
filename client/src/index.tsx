@@ -7,6 +7,10 @@ import "./style/index.css";
 
 import HomePage from "./pages/Home";
 import StockPage from "./pages/Stock";
+import CategoryPage from "./pages/Categories";
+import WarehousesPage from "./pages/Warehouses";
+import SuppliersPage from "./pages/Suppliers";
+import UsersPage from "./pages/Users";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -16,6 +20,10 @@ root.render(
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/stock" element={<StockPage />} />
+      <Route path="/categories" element={<CategoryPage />} />
+      <Route path="/warehouses" element={<WarehousesPage />} />
+      <Route path="/suppliers" element={<SuppliersPage />} />
+      <Route path="/users" element={<UsersPage />} />
     </Routes>
   </BrowserRouter>
 );

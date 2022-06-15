@@ -12,20 +12,20 @@ import PopUp from "../components/PopUp";
 // interfaces
 import ColumnNames from "../interfaces/column-names-state.interface";
 import InputValue from "../interfaces/input-value-object.interface";
-import Table from "../interfaces/table.interface";
+import WarehouseTable from "../interfaces/warehouse-table.interface";
 
-const StockPage = function (): JSX.Element {
+const WarehousesPage = function (): JSX.Element {
   const [formVisibility, setFormVisibility] = useState<boolean>(false);
   const [formInput, setFormInput] = useState<InputValue>({});
   const [columnNames, setColumnNames] = useState<ColumnNames[]>([]);
-  const [tableData, setTableData] = useState<Table[]>([]);
+  const [tableData, setTableData] = useState<WarehouseTable[]>([]);
 
   useEffect(() => {
-    axios.get("/api/get/categoriesColumnNames").then((res) => {
+    axios.get("/api/get/warehousesColumnNames").then((res) => {
       setColumnNames(res.data);
     });
 
-    axios.get("api/get/allCategories").then((res) => {
+    axios.get("api/get/allWarehouses").then((res) => {
       setTableData(res.data);
     });
   });
@@ -45,7 +45,7 @@ const StockPage = function (): JSX.Element {
           }}
           className="border rounded bg-primary hover:bg-primaryDark px-4 text-themeWhite"
         >
-          Add Item
+          Add Warehouse
         </button>
       </div>
 
@@ -55,7 +55,7 @@ const StockPage = function (): JSX.Element {
           setFormInputValues={setFormInput}
           formInput={formInput}
           columnArr={columnNames}
-          action={`/api/add/category/${formInput.category_name}`}
+          action={`/api/add/warehouse/${formInput.warehouse_name}`}
           method="post"
         />
       </PopUp>
@@ -63,10 +63,10 @@ const StockPage = function (): JSX.Element {
       <ItemTable
         columnArr={columnNames}
         tableArr={tableData}
-        deleteLink={"/api/delete/category/"}
+        deleteLink={"/api/delete/warehouse/"}
       />
     </Layout>
   );
 };
 
-export default StockPage;
+export default WarehousesPage;

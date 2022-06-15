@@ -9,8 +9,6 @@ router.get("/api/get/allCategories", async (req, res) => {
     res.send(data);
   } catch (e) {
     console.log(e);
-  } finally {
-    console.log("lol");
   }
 });
 
@@ -39,7 +37,7 @@ router.post("/api/add/category/:catName", async (req, res) => {
     const { data, error } = await psqlDb
       .from("categories")
       .insert({ category_name: req.params.catName });
-    res.send(data);
+    // res.send(data);
   } catch (e) {
     console.log(e);
   }

@@ -27,17 +27,17 @@ function Form({
     value: "",
   });
 
+  // handles input values from the form, not tested completely, might throw errors for different data.
   function inputHandler(event: React.FormEvent<HTMLInputElement>): void {
     event.preventDefault();
-
     setFormIn({
       label: event.currentTarget.name,
       value: event.currentTarget.value,
     });
   }
 
+  // using useeffect to re-render the form everytime input changes, using only useState to rerender will cause the stored state to be one step behind than the actual value.
   useEffect(() => {
-    console.log(formIn);
     const newFormInput = formInput;
     newFormInput[formIn.label] = formIn.value;
     setFormInputValues(newFormInput);
@@ -64,7 +64,7 @@ function Form({
                 val.column_name === "serial_number" ? " hidden" : ""
               }`}
             >
-              {val.column_name.replace("-", " ")}
+              {val.column_name.replace("_", " ")}
               <input
                 className={formInputClass}
                 type={val.type}
@@ -75,7 +75,14 @@ function Form({
           );
         })}
         <button>
-          <input className={formInputClass} type="submit" name="item-name" />
+          <input
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}
+            className={formInputClass}
+            type="submit"
+            name="item-name"
+          />
         </button>
       </form>
     </div>

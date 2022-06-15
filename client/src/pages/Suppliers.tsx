@@ -12,20 +12,20 @@ import PopUp from "../components/PopUp";
 // interfaces
 import ColumnNames from "../interfaces/column-names-state.interface";
 import InputValue from "../interfaces/input-value-object.interface";
-import Table from "../interfaces/table.interface";
+import SuppliersTable from "../interfaces/supplier-table.interface";
 
-const StockPage = function (): JSX.Element {
+const SuppliersPage = function (): JSX.Element {
   const [formVisibility, setFormVisibility] = useState<boolean>(false);
   const [formInput, setFormInput] = useState<InputValue>({});
   const [columnNames, setColumnNames] = useState<ColumnNames[]>([]);
-  const [tableData, setTableData] = useState<Table[]>([]);
+  const [tableData, setTableData] = useState<SuppliersTable[]>([]);
 
   useEffect(() => {
-    axios.get("/api/get/categoriesColumnNames").then((res) => {
+    axios.get("/api/get/supplierColumnNames").then((res) => {
       setColumnNames(res.data);
     });
 
-    axios.get("api/get/allCategories").then((res) => {
+    axios.get("api/get/allSuppliers").then((res) => {
       setTableData(res.data);
     });
   });
@@ -36,7 +36,7 @@ const StockPage = function (): JSX.Element {
         <h1 className="text-3xl text-themeBlack font-medium">
           Inventory
           <span className="text-5xl text-themeBlackLight font-light">
-            Item List
+            Supplier List
           </span>
         </h1>
         <button
@@ -45,7 +45,7 @@ const StockPage = function (): JSX.Element {
           }}
           className="border rounded bg-primary hover:bg-primaryDark px-4 text-themeWhite"
         >
-          Add Item
+          Add Supplier
         </button>
       </div>
 
@@ -55,7 +55,7 @@ const StockPage = function (): JSX.Element {
           setFormInputValues={setFormInput}
           formInput={formInput}
           columnArr={columnNames}
-          action={`/api/add/category/${formInput.category_name}`}
+          action={`/api/add/supplier/${formInput.supplier_name}`}
           method="post"
         />
       </PopUp>
@@ -63,10 +63,10 @@ const StockPage = function (): JSX.Element {
       <ItemTable
         columnArr={columnNames}
         tableArr={tableData}
-        deleteLink={"/api/delete/category/"}
+        deleteLink={"/api/delete/supplier/"}
       />
     </Layout>
   );
 };
 
-export default StockPage;
+export default SuppliersPage;

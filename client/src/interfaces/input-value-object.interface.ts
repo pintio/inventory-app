@@ -1,3 +1,3 @@
 export default interface InputValue {
-  [key: string]: string;
+  [key: string]: string | number;
 }

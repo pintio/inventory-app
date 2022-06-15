@@ -9,6 +9,10 @@ type navObj = {
 const navArr: navObj[] = [
   { link: "", title: "home" },
   { link: "stock", title: "stock" },
+  { link: "categories", title: "categories" },
+  { link: "warehouses", title: "warehouses" },
+  { link: "suppliers", title: "suppliers" },
+  { link: "users", title: "users" },
   { link: "reports", title: "reports" },
   { link: "master list", title: "master list" },
   { link: "Settings", title: "Settings" },

@@ -14,7 +14,7 @@ import ColumnNames from "../interfaces/column-names-state.interface";
 import InputValue from "../interfaces/input-value-object.interface";
 import Table from "../interfaces/table.interface";
 
-const StockPage = function (): JSX.Element {
+const CategoryPage = function (): JSX.Element {
   const [formVisibility, setFormVisibility] = useState<boolean>(false);
   const [formInput, setFormInput] = useState<InputValue>({});
   const [columnNames, setColumnNames] = useState<ColumnNames[]>([]);
@@ -36,7 +36,7 @@ const StockPage = function (): JSX.Element {
         <h1 className="text-3xl text-themeBlack font-medium">
           Inventory
           <span className="text-5xl text-themeBlackLight font-light">
-            Item List
+            Category List
           </span>
         </h1>
         <button
@@ -45,7 +45,7 @@ const StockPage = function (): JSX.Element {
           }}
           className="border rounded bg-primary hover:bg-primaryDark px-4 text-themeWhite"
         >
-          Add Item
+          Add Category
         </button>
       </div>
 
@@ -69,4 +69,4 @@ const StockPage = function (): JSX.Element {
   );
 };
 
-export default StockPage;
+export default CategoryPage;

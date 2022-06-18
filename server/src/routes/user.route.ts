@@ -17,14 +17,15 @@ router.get("/api/get/userColumnNames", async (req, res) => {
 router.get("/api/get/allUsers", async (req, res) => {
   try {
     const { data, error } = await psqlDb.from("users").select("*");
-    if (error) console.log("supabase error", error);
+    if (!error) res.send(data);
+    if (error) console.log(error, "user route");
   } catch (error) {
     console.log(error);
   }
 });
 
 router.post("/api/add/user/:username&:fullname&:position", async (req, res) => {
-  const today = new Date().getDate;
+  const today = new Date().getDate();
 
   try {
     const { data, error } = await psqlDb.from("users").insert({
@@ -34,10 +35,11 @@ router.post("/api/add/user/:username&:fullname&:position", async (req, res) => {
       full_name: req.params.fullname,
       /* @ts-ignore */
       position: req.params.position,
+      /* @ts-ignore */
       joining_date: today,
     });
-
-    if (error) console.log(error);
+    // res.send();
+    if (error) console.log(error, "user route");
   } catch (error) {
     console.log(error);
   }
@@ -50,7 +52,7 @@ router.delete("/api/delete/user/:userId", async (req, res) => {
       .delete()
       .match({ user_id: req.params.userId });
 
-    if (error) console.log(error);
+    if (error) console.log(error, "user route");
   } catch (error) {
     console.log(error);
   }

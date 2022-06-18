@@ -30,6 +30,10 @@ const UsersPage = function (): JSX.Element {
     });
   });
 
+  useEffect(() => {
+    console.log(formInput);
+  }, [formInput]);
+
   return (
     <Layout>
       <div className="my-6 flex justify-between bg-slate-50">

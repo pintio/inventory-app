@@ -52,10 +52,11 @@ router.delete("/api/delete/category/:catId", async (req, res) => {
     res.send(data);
   } catch (e) {
     console.log(e);
-  } finally {
-    const { data, error } = await psqlDb.rpc("reset_seq()");
-    console.log(data, error);
   }
+  // finally {
+  //   const { data, error } = await psqlDb.rpc("reset_seq()");
+  //   console.log(data, error);
+  // }
 });
 
 module.exports = router;

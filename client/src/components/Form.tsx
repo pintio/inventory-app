@@ -41,6 +41,7 @@ function Form({
     const newFormInput = formInput;
     newFormInput[formIn.label] = formIn.value;
     setFormInputValues(newFormInput);
+    console.log(newFormInput);
   }, [formIn, formInput, setFormInputValues]);
 
   return (

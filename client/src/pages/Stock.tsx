@@ -21,11 +21,11 @@ const StockPage = function (): JSX.Element {
   const [tableData, setTableData] = useState<Table[]>([]);
 
   useEffect(() => {
-    axios.get("/api/get/categoriesColumnNames").then((res) => {
+    axios.get("/api/get/materialsColumnNames").then((res) => {
       setColumnNames(res.data);
     });
 
-    axios.get("api/get/allCategories").then((res) => {
+    axios.get("api/get/allMaterials").then((res) => {
       setTableData(res.data);
     });
   });
@@ -45,7 +45,7 @@ const StockPage = function (): JSX.Element {
           }}
           className="border rounded bg-primary hover:bg-primaryDark px-4 text-themeWhite"
         >
-          Add Item
+          Add Material
         </button>
       </div>
 
@@ -55,7 +55,7 @@ const StockPage = function (): JSX.Element {
           setFormInputValues={setFormInput}
           formInput={formInput}
           columnArr={columnNames}
-          action={`/api/add/category/${formInput.category_name}`}
+          action={`/api/add/category/${formInput.material_name}&${formInput.last_update}&${formInput.category_id}&${formInput.warehouse_id}&${formInput.supplier_id}&${formInput.received_by}`}
           method="post"
         />
       </PopUp>

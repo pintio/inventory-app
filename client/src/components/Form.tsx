@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 
-// interface
+// interfaces
 import ColumnNames from "../interfaces/column-names-state.interface";
 import InputValue from "../interfaces/input-value-object.interface";
+
+// setVisibility - visibilty state of the form, passed down from the parent
+// formInput & setFormInputValues - getter and setter for form input values
+// columnArr - arr of column labels alongwith their type to setup form column headings
+// action - form action, i.e. the url that the form will call when submited
+// method - form submission method i.e. post, get, put etc.
 
 function Form({
   setVisibility,
@@ -27,7 +33,7 @@ function Form({
     value: "",
   });
 
-  // handles input values from the form, not tested completely, might throw errors for different data.
+  // handles input values from the form then sets them to the formIn state, later in useEffect its values are used to change the state of the formInput state passed down fromm the parent conmnponent
   function inputHandler(event: React.FormEvent<HTMLInputElement>): void {
     event.preventDefault();
     setFormIn({

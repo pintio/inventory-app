@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request } from "express";
 import psqlDb from "../db";
 
 const router = express.Router();
@@ -9,7 +9,7 @@ router.get("/api/get/userColumnNames", async (req, res) => {
     { column_name: "user_name", type: "text" },
     { column_name: "full_name", type: "text" },
     { column_name: "position", type: "text" },
-    { column_name: "joining_date", type: "date" },
+    { column_name: "joining_date", type: "text" },
   ];
   res.send(columnArr);
 });
@@ -18,44 +18,49 @@ router.get("/api/get/allUsers", async (req, res) => {
   try {
     const { data, error } = await psqlDb.from("users").select("*");
     if (!error) res.send(data);
-    if (error) console.log(error, "user route");
+    if (error) console.log(error, "user route 1");
   } catch (error) {
     console.log(error);
   }
 });
 
-router.post("/api/add/user/:username&:fullname&:position", async (req, res) => {
-  const today = new Date().getDate();
+router.post(
+  "/api/add/user/:username&:fullname&:position",
+  async (
+    req: Request<{ username: string; fullname: string; position: string }>,
+    res
+  ) => {
+    const today = new Date().getDate();
 
-  try {
-    const { data, error } = await psqlDb.from("users").insert({
-      /* @ts-ignore */
-      user_name: req.params.username,
-      /* @ts-ignore */
-      full_name: req.params.fullname,
-      /* @ts-ignore */
-      position: req.params.position,
-      /* @ts-ignore */
-      joining_date: today,
-    });
-    // res.send();
-    if (error) console.log(error, "user route");
-  } catch (error) {
-    console.log(error);
+    try {
+      const { data, error } = await psqlDb.from("users").insert({
+        user_name: req.params.username,
+        full_name: req.params.fullname,
+        position: req.params.position,
+        joining_date: today,
+      });
+      // res.send();
+      if (error) console.log(error, "user route 2");
+    } catch (error) {
+      console.log(error);
+    }
   }
-});
+);
 
-router.delete("/api/delete/user/:userId", async (req, res) => {
-  try {
-    const { data, error } = await psqlDb
-      .from("users")
-      .delete()
-      .match({ user_id: req.params.userId });
+router.delete(
+  "/api/delete/user/:userId",
+  async (req: Request<{ userId: number }>, res) => {
+    try {
+      const { data, error } = await psqlDb
+        .from("users")
+        .delete()
+        .match({ user_id: req.params.userId });
 
-    if (error) console.log(error, "user route");
-  } catch (error) {
-    console.log(error);
+      if (error) console.log(error, "user route 3");
+    } catch (error) {
+      console.log(error);
+    }
   }
-});
+);
 
 module.exports = router;

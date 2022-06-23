@@ -25,14 +25,14 @@ function ItemTable({
   const handleDelete = function (e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     const id: string = e.currentTarget.getAttribute("data-id") as string;
-    console.log("id", id);
-    console.log(e.currentTarget.getAttribute("data-id"));
     setDeleteId(parseInt(id));
   };
 
   useEffect(() => {
-    axios.delete(`${deleteLink}${deleteId}`);
-    console.log(`${deleteLink}${deleteId}`);
+    if (deleteId) {
+      axios.delete(`${deleteLink}${deleteId}`);
+      console.log("lololol");
+    }
   }, [deleteId, deleteLink]);
 
   return (

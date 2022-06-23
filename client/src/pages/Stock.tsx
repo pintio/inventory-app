@@ -5,7 +5,7 @@ import Layout from "../components/Layout";
 
 import ItemTable from "../components/ItemTable";
 
-import Form from "../components/Form";
+// import Form from "../components/Form";
 
 import PopUp from "../components/PopUp";
 
@@ -17,8 +17,20 @@ import Table from "../interfaces/table.interface";
 const StockPage = function (): JSX.Element {
   const [formVisibility, setFormVisibility] = useState<boolean>(false);
   const [formInput, setFormInput] = useState<InputValue>({});
+  const [formData, setFormData] = useState<{ [key: string]: InputValue[] }>({});
   const [columnNames, setColumnNames] = useState<ColumnNames[]>([]);
   const [tableData, setTableData] = useState<Table[]>([]);
+
+  const formInputClass: string =
+    " bg-secondary-400 rounded py-1 px-2 my-2 text-secondary-900";
+
+  function inputHandler(event: React.FormEvent<HTMLInputElement>): void {
+    event.preventDefault();
+    setFormInput({
+      label: event.currentTarget.name,
+      value: event.currentTarget.value,
+    });
+  }
 
   useEffect(() => {
     axios.get("/api/get/materialsColumnNames").then((res) => {
@@ -28,7 +40,34 @@ const StockPage = function (): JSX.Element {
     axios.get("api/get/allMaterials").then((res) => {
       setTableData(res.data);
     });
-  });
+
+    const categoryData = axios.get("api/get/allCategories").then((res) => {
+      return res.data;
+    });
+
+    const suppliersData = axios.get("api/get/allSuppliers").then((res) => {
+      return res.data;
+    });
+
+    const warehouseData = axios.get("api/get/allWarehouses").then((res) => {
+      return res.data;
+    });
+
+    const userData = axios.get("api/get/allUsers").then((res) => {
+      return res.data;
+    });
+
+    Promise.all([categoryData, suppliersData, warehouseData, userData]).then(
+      (values) => {
+        setFormData({
+          category: values[0],
+          supplier: values[1],
+          warehouse: values[2],
+          user: values[3],
+        });
+      }
+    );
+  }, [formData]);
 
   return (
     <Layout>
@@ -50,14 +89,49 @@ const StockPage = function (): JSX.Element {
       </div>
 
       <PopUp visibility={formVisibility}>
-        <Form
-          setVisibility={setFormVisibility}
-          setFormInputValues={setFormInput}
-          formInput={formInput}
-          columnArr={columnNames}
-          action={`/api/add/category/${formInput.material_name}&${formInput.last_update}&${formInput.category_id}&${formInput.warehouse_id}&${formInput.supplier_id}&${formInput.received_by}`}
-          method="post"
-        />
+        <div className="bg-slate-800 rounded-md border-[0.3px] w-72 text-themeWhite">
+          <button
+            //   onClick function to hide the parent component
+            onClick={() => {
+              setFormVisibility(false);
+            }}
+            className=" float-right text-2xl font-bold mr-4 mt-1 text-slate-200 hover:text-themeWhite"
+          >
+            X
+          </button>
+
+          <form
+            className="px-16 py-8"
+            action={`/api/add/material/${formInput.material_name}`}
+            method="POST"
+          >
+            <label>
+              Material Name
+              <input
+                className={formInputClass}
+                type="text"
+                name="material_name"
+                onChange={inputHandler}
+              />
+            </label>
+            {Object.keys(formData).length === 0 ? (
+              <></>
+            ) : (
+              <SelectElement formData={formData} />
+            )}
+
+            <button>
+              <input
+                onSubmit={(e) => {
+                  e.preventDefault();
+                }}
+                className={formInputClass}
+                type="submit"
+                name="item-name"
+              />
+            </button>
+          </form>
+        </div>
       </PopUp>
 
       <ItemTable
@@ -66,6 +140,77 @@ const StockPage = function (): JSX.Element {
         deleteLink={"/api/delete/category/"}
       />
     </Layout>
+  );
+};
+
+const SelectElement = function ({
+  formData,
+}: {
+  formData: { [key: string]: InputValue[] };
+}) {
+  function selectChange(event: React.FormEvent<HTMLSelectElement>): void {
+    const value = event.currentTarget.value;
+    console.log(event.currentTarget.name);
+  }
+
+  return (
+    <>
+      <label className=" w-full text-lg font-semibold text-white">
+        Category
+        <select
+          onChange={selectChange}
+          name="category"
+          className="w-full bg-slate-700 py-1 px-4 rounded-lg mt-1 mb-4 text-base text-slate-300 font-normal"
+        >
+          {formData.category.map((val, index) => {
+            return (
+              <option
+                className=" bg-slate-700 hover:bg-slate-800 focus:bg-slate-800 checked:bg-slate-800 "
+                value={val.cat_id}
+              >
+                {val.category_name}
+              </option>
+            );
+          })}
+        </select>
+      </label>
+      <label className=" w-full text-lg font-semibold text-white ">
+        Supplier
+        <select
+          name="category"
+          className="w-full bg-slate-700 py-1 px-4 rounded-lg mt-1 mb-4 text-base text-slate-300 font-normal "
+        >
+          {formData.supplier.map((val, index) => {
+            return (
+              <option
+                className=" bg-slate-700 hover:bg-slate-800 focus:bg-slate-800 checked:bg-slate-800"
+                value={val.s_id}
+              >
+                {val.supplier_name}
+              </option>
+            );
+          })}
+        </select>
+      </label>
+      <label className=" w-full text-lg font-semibold text-white ">
+        Category
+        <select
+          name="category"
+          className="w-full bg-slate-700 py-1 px-4 rounded-lg mt-1 mb-4 text-base text-slate-300 font-normal"
+        >
+          {formData.category.map((val, index) => {
+            return (
+              <option
+                className=" bg-slate-700 hover:bg-slate-800 focus:bg-slate-800 checked:bg-slate-800"
+                value={val.cat_id}
+              >
+                {val.category_name}
+              </option>
+            );
+          })}
+        </select>
+      </label>
+    </>
   );
 };
 

@@ -8,10 +8,10 @@ router.get("/api/get/materialsColumnNames", async (req, res) => {
     { column_name: "serial_number", type: "number" },
     { column_name: "material_name", type: "string" },
     { column_name: "last_update", type: "date" },
-    { column_name: "category_id", type: "number" },
-    { column_name: "warehouse_id", type: "number" },
-    { column_name: "supplier_id", type: "number" },
-    { column_name: "received_by", type: "number" },
+    { column_name: "category", type: "number" },
+    { column_name: "warehouse", type: "number" },
+    { column_name: "supplier", type: "number" },
+    { column_name: "received", type: "number" },
   ];
   res.send(columnArr);
 });
@@ -30,11 +30,10 @@ router.get("/api/get/allMaterials", async (req, res) => {
 });
 
 router.post(
-  "api/add/material/:materialname&:lastupdate&:categoryid&:warehouseid&:supplierid&:receivedby",
+  "api/add/material/:materialname&:categoryid&:warehouseid&:supplierid&:receivedby",
   async (
     req: Request<{
       materialname: string;
-      lastupdate: string;
       categoryid: number;
       warehouseid: number;
       supplierid: string;

@@ -1,8 +1,18 @@
-import express from "express";
+import express, { Request } from "express";
 import psqlDb from "../db";
 
 const router = express.Router();
 
+// to get column names and types
+router.get("/api/get/categoriesColumnNames", async (req, res) => {
+  const columnArr: { column_name: string; type: string }[] = [
+    { column_name: "serial_number", type: "number" },
+    { column_name: "category_name", type: "text" },
+  ];
+  res.send(columnArr);
+});
+
+// to get all categories
 router.get("/api/get/allCategories", async (req, res) => {
   try {
     const { data, error } = await psqlDb.from("categories").select("*");
@@ -12,25 +22,19 @@ router.get("/api/get/allCategories", async (req, res) => {
   }
 });
 
-router.get("/api/get/categoriesColumnNames", async (req, res) => {
-  // try {
-  //   const { data, error } = await psqlDb
-  //     .from("information_schema.columns")
-  //     .select("column_name , data_type")
-  //     .match({ table_name: "categories" });
-
-  //   res.send(data);
-  //   if (error) console.error(error);
-  //   console.log(data);
-  // } catch (error) {
-  //   console.log(error, psqlDb.auth.user());
-  // }
-  const columnArr: { column_name: string; type: string }[] = [
-    { column_name: "serial_number", type: "number" },
-    { column_name: "category_name", type: "text" },
-  ];
-  res.send(columnArr);
-});
+// to get only one category matching the id
+// TODO
+router.get(
+  "/api/get/category/:id",
+  async (req: Request<{ id: number }>, res) => {
+    try {
+      const { data, error } = await psqlDb.from("categories").select("*");
+      res.send(data);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
 
 router.post("/api/add/category/:catName", async (req, res) => {
   try {
@@ -38,6 +42,11 @@ router.post("/api/add/category/:catName", async (req, res) => {
       .from("categories")
       .insert({ category_name: req.params.catName });
     // res.send(data);
+    if (error) {
+      console.log(error);
+      return;
+    }
+    res.status(204).send();
   } catch (e) {
     console.log(e);
   }

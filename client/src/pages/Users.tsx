@@ -32,7 +32,7 @@ const UsersPage = function (): JSX.Element {
 
   useEffect(() => {
     console.log(formInput);
-  }, [formInput]);
+  }, [formInput, formVisibility]);
 
   return (
     <Layout>

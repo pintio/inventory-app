@@ -25,6 +25,7 @@ router.post("/api/add/warehouse/:whName", async (req, res) => {
     const { data, error } = await psqlDb
       .from("warehouses")
       .insert({ warehouse_name: req.params.whName });
+    if (!error) res.status(204).send();
   } catch (error) {
     console.log(error);
   }

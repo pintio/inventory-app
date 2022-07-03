@@ -25,7 +25,11 @@ router.post("/api/add/supplier/:suppName", async (req, res) => {
     const { data, error } = await psqlDb
       .from("suppliers")
       .insert({ supplier_name: req.params.suppName });
-    if (error) console.log(error);
+    if (error) {
+      console.log(error);
+      return;
+    }
+    res.status(204).send();
   } catch (error) {
     console.log(error);
   }

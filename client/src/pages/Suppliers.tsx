@@ -28,7 +28,8 @@ const SuppliersPage = function (): JSX.Element {
     axios.get("api/get/allSuppliers").then((res) => {
       setTableData(res.data);
     });
-  });
+    console.log(formInput);
+  }, [formInput, formVisibility]);
 
   return (
     <Layout>

@@ -11,7 +11,7 @@ router.get("/api/get/materialsColumnNames", async (req, res) => {
     { column_name: "category", type: "number" },
     { column_name: "warehouse", type: "number" },
     { column_name: "supplier", type: "number" },
-    { column_name: "received", type: "number" },
+    { column_name: "receiver", type: "number" },
   ];
   res.send(columnArr);
 });
@@ -30,20 +30,20 @@ router.get("/api/get/allMaterials", async (req, res) => {
 });
 
 router.post(
-  "api/add/material/:materialname&:categoryid&:warehouseid&:supplierid&:receivedby",
+  "/api/add/material/:materialname&:categoryid&:warehouseid&:supplierid&:receivedby",
   async (
     req: Request<{
       materialname: string;
       categoryid: number;
       warehouseid: number;
-      supplierid: string;
-      receivedby: string;
+      supplierid: number;
+      receivedby: number;
     }>,
     res
   ) => {
     try {
       const date = new Date();
-      const today = `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`;
+      const today = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
       const { data, error } = await psqlDb.from("materials").insert({
         material_name: req.params.materialname,
         last_update: today,
@@ -56,6 +56,7 @@ router.post(
         console.log(error);
         return;
       }
+      res.status(204).send();
     } catch (error) {
       console.log(error);
     }
@@ -74,6 +75,7 @@ router.delete(
         console.log(error);
         return;
       }
+      res.status(204).send();
     } catch (error) {
       console.log(error);
     }

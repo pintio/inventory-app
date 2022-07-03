@@ -26,7 +26,7 @@ function Form({
   method: string;
 }): JSX.Element {
   const formInputClass: string =
-    " bg-secondary-400 rounded py-1 px-2 my-2 text-secondary-900";
+    " bg-secondary-400 rounded py-1 px-2 my-2 text-secondary-900 disabled:bg-secondary-800";
 
   const [formIn, setFormIn] = useState<{ label: string; value: string }>({
     label: "",
@@ -44,11 +44,11 @@ function Form({
 
   // using useeffect to re-render the form everytime input changes, using only useState to rerender will cause the stored state to be one step behind than the actual value.
   useEffect(() => {
-    const newFormInput = formInput;
+    const newFormInput = { ...formInput };
     newFormInput[formIn.label] = formIn.value;
     setFormInputValues(newFormInput);
-    console.log(newFormInput);
-  }, [formIn, formInput, setFormInputValues]);
+    console.log(formInput, "ff");
+  }, [formIn]);
 
   return (
     <div className="bg-slate-800 rounded-md border-[0.3px]  w-min text-themeWhite">
@@ -68,7 +68,11 @@ function Form({
             <label
               key={val.column_name}
               className={`${
-                val.column_name === "serial_number" ? " hidden" : ""
+                val.column_name === "serial_number"
+                  ? " hidden"
+                  : val.column_name === "joining_date"
+                  ? " hidden"
+                  : ""
               }`}
             >
               {val.column_name.replace("_", " ")}
@@ -84,7 +88,7 @@ function Form({
         <button>
           <input
             onSubmit={(e) => {
-              e.preventDefault();
+              // e.preventDefault();
             }}
             className={formInputClass}
             type="submit"

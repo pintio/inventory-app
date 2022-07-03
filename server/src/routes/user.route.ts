@@ -30,8 +30,9 @@ router.post(
     req: Request<{ username: string; fullname: string; position: string }>,
     res
   ) => {
-    const today = new Date().getDate();
-
+    const date = new Date();
+    const today = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+    console.log(today);
     try {
       const { data, error } = await psqlDb.from("users").insert({
         user_name: req.params.username,
@@ -40,7 +41,11 @@ router.post(
         joining_date: today,
       });
       // res.send();
-      if (error) console.log(error, "user route 2");
+      if (error) {
+        console.log(error, "user route 2");
+        return;
+      }
+      res.status(204).send();
     } catch (error) {
       console.log(error);
     }

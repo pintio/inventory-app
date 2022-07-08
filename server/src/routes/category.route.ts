@@ -23,12 +23,14 @@ router.get("/api/get/allCategories", async (req, res) => {
 });
 
 // to get only one category matching the id
-// TODO
 router.get(
   "/api/get/category/:id",
   async (req: Request<{ id: number }>, res) => {
     try {
-      const { data, error } = await psqlDb.from("categories").select("*");
+      const { data, error } = await psqlDb
+        .from("categories")
+        .select("*")
+        .match({ cat_id: req.params.id });
       res.send(data);
     } catch (e) {
       console.log(e);

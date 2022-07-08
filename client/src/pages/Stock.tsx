@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios, { AxiosResponse, AxiosResponseHeaders } from "axios";
 
 import Layout from "../components/Layout";
 
@@ -25,14 +25,39 @@ const StockPage = function (): JSX.Element {
     " bg-secondary-400 rounded py-1 px-2 my-2 text-secondary-900";
 
   useEffect(() => {
+    // getter - get data from server. impl. to reduce repitive code.
+    const dataGetter = function (link: string) {
+      let data = axios.get(`/api/get/${link}`).then((res) => {
+        return res.data;
+      });
+      return data;
+    };
+
     axios.get("/api/get/materialsColumnNames").then((res) => {
       setColumnNames(res.data);
     });
 
-    axios.get("/api/get/allMaterials").then((res) => {
-      let data = res.data;
-      data.received_by = setTableData(res.data);
-      console.log(res.data, "materialData");
+    axios.get("api/get/allMaterials").then(async (res) => {
+      let materialArr = res.data;
+
+      // TODO
+      // implement api to add singular data to each table.
+      // then create a chain of promise to get data from each table using the IDs.
+      // then after resolving all the promises, set the tableData by feeding the newArr
+
+      let newArr = await materialArr.map(
+        (material: { category_id: number }) => {
+          let mat = { ...material };
+          console.log(mat, "lolmat");
+          axios.get(`api/get/category/${material.category_id}`).then((res) => {
+            mat.category_id = res.data[0].category_name;
+            return mat;
+          });
+        }
+      );
+
+      setTableData(newArr);
+      console.log(newArr, "newArr");
     });
 
     const categoryData = axios.get("api/get/allCategories").then((res) => {

@@ -8,6 +8,7 @@ import Table from "../interfaces/table.interface";
 import WarehouseTable from "../interfaces/warehouse-table.interface";
 import SuppliersTable from "../interfaces/supplier-table.interface";
 import UsersTable from "../interfaces/user-table.interface";
+import MaterialTable from "../interfaces/material-table.interface";
 
 // tableArr -> type set to unknown temporary
 
@@ -17,7 +18,12 @@ function ItemTable({
   deleteLink,
 }: {
   columnArr: ColumnNames[];
-  tableArr: Table[] | WarehouseTable[] | SuppliersTable[] | UsersTable[];
+  tableArr:
+    | Table[]
+    | WarehouseTable[]
+    | SuppliersTable[]
+    | UsersTable[]
+    | MaterialTable[];
   deleteLink: string;
 }) {
   const [deleteId, setDeleteId] = useState<number>(NaN);

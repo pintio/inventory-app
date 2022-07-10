@@ -14,6 +14,19 @@ router.get("/api/get/userColumnNames", async (req, res) => {
   res.send(columnArr);
 });
 
+// to get only one user matching the id
+router.get("/api/get/user/:id", async (req: Request<{ id: number }>, res) => {
+  try {
+    const { data, error } = await psqlDb
+      .from("users")
+      .select("*")
+      .match({ user_id: req.params.id });
+    res.send(data);
+  } catch (e) {
+    console.log(e);
+  }
+});
+
 router.get("/api/get/allUsers", async (req, res) => {
   try {
     const { data, error } = await psqlDb.from("users").select("*");

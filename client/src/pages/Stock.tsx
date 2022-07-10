@@ -13,26 +13,20 @@ import PopUp from "../components/PopUp";
 import ColumnNames from "../interfaces/column-names-state.interface";
 import InputValue from "../interfaces/input-value-object.interface";
 import Table from "../interfaces/table.interface";
+import MaterialTable from "../interfaces/material-table.interface";
 
 const StockPage = function (): JSX.Element {
   const [formVisibility, setFormVisibility] = useState<boolean>(false);
   const [formInput, setFormInput] = useState<InputValue>({});
   const [formData, setFormData] = useState<{ [key: string]: InputValue[] }>({});
   const [columnNames, setColumnNames] = useState<ColumnNames[]>([]);
-  const [tableData, setTableData] = useState<Table[]>([]);
+  const [tableData, setTableData] = useState<MaterialTable[]>([]);
+  // const [materialData, setMaterialData] = useState<MaterialTable[]>([]);
 
   const formInputClass: string =
     " bg-secondary-400 rounded py-1 px-2 my-2 text-secondary-900";
 
   useEffect(() => {
-    // getter - get data from server. impl. to reduce repitive code.
-    const dataGetter = function (link: string) {
-      let data = axios.get(`/api/get/${link}`).then((res) => {
-        return res.data;
-      });
-      return data;
-    };
-
     axios.get("/api/get/materialsColumnNames").then((res) => {
       setColumnNames(res.data);
     });
@@ -40,24 +34,55 @@ const StockPage = function (): JSX.Element {
     axios.get("api/get/allMaterials").then(async (res) => {
       let materialArr = res.data;
 
-      // TODO
-      // implement api to add singular data to each table.
-      // then create a chain of promise to get data from each table using the IDs.
-      // then after resolving all the promises, set the tableData by feeding the newArr
-
-      let newArr = await materialArr.map(
-        (material: { category_id: number }) => {
-          let mat = { ...material };
-          console.log(mat, "lolmat");
-          axios.get(`api/get/category/${material.category_id}`).then((res) => {
-            mat.category_id = res.data[0].category_name;
-            return mat;
+      await materialArr.forEach(async (material: MaterialTable) => {
+        let mat = { ...material };
+        console.log(material, "lolmat");
+        const category = axios
+          .get(`api/get/category/${material.category_id}`)
+          .then((res) => {
+            // mat.category_id = res.data[0].category_name;
+            return res.data[0].category_name;
           });
-        }
-      );
 
-      setTableData(newArr);
-      console.log(newArr, "newArr");
+        const warehouse = axios
+          .get(`api/get/warehouse/${material.warehouse_id}`)
+          .then((res) => {
+            return res.data[0].warehouse_name;
+          });
+
+        const supplier = axios
+          .get(`api/get/supplier/${material.supplier_id}`)
+          .then((res) => {
+            console.log(res.data, "data");
+            return res.data[0].supplier_name;
+          });
+
+        const reciever = axios
+          .get(`api/get/user/${material.received_by}`)
+          .then((res) => {
+            return res.data[0].user_name;
+          });
+
+        return Promise.all([category, warehouse, supplier, reciever])
+          .then((values) => {
+            [
+              mat.category_id,
+              mat.warehouse_id,
+              mat.supplier_id,
+              mat.received_by,
+            ] = values;
+            console.log(values, "values");
+          })
+          .then(() => {
+            const newMaterial = [...tableData];
+
+            if (newMaterial.indexOf(mat) === -1) {
+              newMaterial.push(mat);
+            }
+            setTableData(newMaterial);
+            console.log(mat, "loop material");
+          });
+      });
     });
 
     const categoryData = axios.get("api/get/allCategories").then((res) => {
@@ -85,9 +110,9 @@ const StockPage = function (): JSX.Element {
           user: values[3],
         });
       })
-      .then(() => console.log(formData));
+      .then(() => console.log(formData, "form data"));
 
-    console.log(formInput);
+    console.log(formInput, "input from form fields");
   }, [formInput]);
 
   return (

@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request } from "express";
 import psqlDb from "../db";
 
 const router = express.Router();
@@ -19,6 +19,22 @@ router.get("/api/get/allWarehouses", async (req, res) => {
     console.log(e);
   }
 });
+
+// to get only one wh matching the id
+router.get(
+  "/api/get/warehouse/:id",
+  async (req: Request<{ id: number }>, res) => {
+    try {
+      const { data, error } = await psqlDb
+        .from("warehouses")
+        .select("*")
+        .match({ w_id: req.params.id });
+      res.send(data);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
 
 router.post("/api/add/warehouse/:whName", async (req, res) => {
   try {

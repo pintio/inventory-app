@@ -1,3 +1,4 @@
+import { isVisible } from "@testing-library/user-event/dist/utils";
 import React, { useEffect, useState } from "react";
 
 // interfaces
@@ -17,17 +18,22 @@ function Form({
   columnArr,
   action,
   method,
+  onSubmitHandler,
+  buttonText = "Submit",
 }: {
-  setVisibility: (value: React.SetStateAction<boolean>) => void;
+  setVisibility?: (value: React.SetStateAction<boolean>) => void;
   setFormInputValues: (value: React.SetStateAction<InputValue>) => void;
   formInput: InputValue;
   columnArr: ColumnNames[];
   action: string;
   method: string;
+  onSubmitHandler?: () => void;
+  buttonText?: string;
 }): JSX.Element {
   const formInputClass: string =
     " bg-secondary-400 rounded py-1 px-2 my-2 text-secondary-900 disabled:bg-secondary-800";
 
+  // state to store form inputs, stores inputs from only one field
   const [formIn, setFormIn] = useState<{ label: string; value: string }>({
     label: "",
     value: "",
@@ -44,6 +50,7 @@ function Form({
 
   // using useeffect to re-render the form everytime input changes, using only useState to rerender will cause the stored state to be one step behind than the actual value.
   useEffect(() => {
+    // since making changes to the original object (formInput state) do not re-render the component (react uses object.is() to compare objects) making a copy of the fromInput input and then making changes to the copied object.
     const newFormInput = { ...formInput };
     newFormInput[formIn.label] = formIn.value;
     setFormInputValues(newFormInput);
@@ -52,17 +59,34 @@ function Form({
 
   return (
     <div className="bg-slate-800 rounded-md border-[0.3px]  w-min text-themeWhite">
-      <button
-        //   onClick function to hide the parent component
-        onClick={() => {
-          setVisibility(false);
-        }}
-        className=" float-right text-2xl font-bold mr-4 mt-1 text-slate-200 hover:text-themeWhite"
-      >
-        X
-      </button>
+      {setVisibility ? (
+        <button
+          //   onClick function to hide the parent component
+          onClick={() => {
+            setVisibility(false);
+          }}
+          className=" float-right text-2xl font-bold mr-4 mt-1 text-slate-200 hover:text-themeWhite"
+        >
+          X
+        </button>
+      ) : (
+        <></>
+      )}
 
-      <form className="px-16 py-8" action={action} method={method}>
+      <form
+        className="px-16 py-8"
+        action={action}
+        method={method}
+        encType="application/x-www-form-urlencoded"
+        onSubmit={
+          onSubmitHandler
+            ? (e) => {
+                e.preventDefault();
+                onSubmitHandler();
+              }
+            : () => {}
+        }
+      >
         {columnArr.map((val) => {
           return (
             <label
@@ -87,12 +111,10 @@ function Form({
         })}
         <button>
           <input
-            onSubmit={(e) => {
-              // e.preventDefault();
-            }}
             className={formInputClass}
             type="submit"
             name="item-name"
+            value={buttonText}
           />
         </button>
       </form>

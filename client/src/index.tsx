@@ -11,6 +11,8 @@ import CategoryPage from "./pages/Categories";
 import WarehousesPage from "./pages/Warehouses";
 import SuppliersPage from "./pages/Suppliers";
 import UsersPage from "./pages/Users";
+import WelcomePage from "./pages/Welcome";
+import CompanySetup from "./pages/CompanySetup";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -24,6 +26,8 @@ root.render(
       <Route path="/warehouses" element={<WarehousesPage />} />
       <Route path="/suppliers" element={<SuppliersPage />} />
       <Route path="/users" element={<UsersPage />} />
+      <Route path="/welcome" element={<WelcomePage />} />
+      <Route path="/profile-setup/:email/:uuid" element={<CompanySetup />} />
     </Routes>
   </BrowserRouter>
 );

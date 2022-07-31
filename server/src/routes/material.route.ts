@@ -1,3 +1,4 @@
+import { RealtimeSubscription } from "@supabase/supabase-js";
 import express, { Request } from "express";
 import psqlDb from "../db";
 
@@ -78,6 +79,65 @@ router.delete(
       res.status(204).send();
     } catch (error) {
       console.log(error);
+    }
+  }
+);
+
+// updating material quantity
+// data received from the url is string, quantity needs to be converted to the int to manipulate it.
+// add error handeling cases - TODO
+router.patch(
+  "/api/material/:case/:materialId&:quantity",
+  async (
+    req: Request<{ case: string; materialId: number; quantity: string }>,
+    res
+  ) => {
+    let currentQuantity: number = 0;
+
+    const quantityCalculator = function (): number {
+      const quantityAsNumber = parseInt(req.params.quantity);
+
+      let update: number = 0;
+      switch (req.params.case) {
+        case "receive":
+          update = (currentQuantity + quantityAsNumber) as number;
+          break;
+        case "sell":
+          update = (currentQuantity - quantityAsNumber) as number;
+          break;
+        default:
+          break;
+      }
+      return update;
+    };
+
+    try {
+      console.log("inn3");
+      const { data, error } = await psqlDb
+        .from("materials")
+        .select("quantity")
+        .eq("m_id", req.params.materialId);
+      if (!error) {
+        console.log(data[0].quantity);
+        currentQuantity = data[0].quantity as number;
+      } else {
+        console.log(error);
+        return;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+
+    try {
+      console.log("inn5");
+      const { data, error } = await psqlDb
+        .from("materials")
+        .update({ quantity: quantityCalculator() })
+        .eq("m_id", req.params.materialId);
+
+      if (!error) res.status(204).send();
+    } catch (error) {
+      console.log(error, "material router update error");
     }
   }
 );
